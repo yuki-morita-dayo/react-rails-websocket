@@ -1,14 +1,13 @@
+require "y/actioncable"
+
 # app/channels/sync_channel.rb
 class SyncChannel < ApplicationCable::Channel
-    include Y::Actioncable::Sync
   
     def subscribed
-      # initiate sync & subscribe to updates, with optional persistence mechanism
-      sync_for(session)
+      stream_from("document-1")
     end
   
     def receive(message)
-      # broadcast update to all connected clients on all servers
-      sync_to(session, message)
+      ActionCable.server.broadcast("document-1", message)
     end
   end
